@@ -2,9 +2,22 @@ addEventListener('load', function() {
     document.getElementById('play').addEventListener('click', 
     function(){
         sessionStorage.removeItem('load');
-        window.location.assign("./html/game.html");
+        window.location.assign("./html/canvasgame.html");
     });
+    document.getElementById('scores').addEventListener('click', 
+    function(){
+        let ranking = localStorage.ranking ? JSON.parse(localStorage.ranking) : [];
+        if (ranking.length === 0) {
+            alert("Encara no hi ha puntuacions guardades");
+            return;
+        }
 
+        let text = "Puntuacions:\n\n";
+        ranking.forEach(function(p, index){
+            text += (index + 1) + ". " + p.alias + " - " + p.score + " punts\n";
+        });
+        alert(text);
+    });
     document.getElementById('options').addEventListener('click', 
     function(){
         window.location.assign("./html/options.html");
@@ -30,7 +43,7 @@ addEventListener('load', function() {
             return;
         }
         sessionStorage.load = to_load;
-        window.location.assign("./html/game.html");
+        window.location.assign("./html/canvasgame.html");
     });
 
     document.getElementById('exit').addEventListener('click', 
