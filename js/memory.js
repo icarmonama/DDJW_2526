@@ -22,6 +22,8 @@ var game = {
     mode: 1,
     level: 1,
     totalScore: 0,
+    saveId: null,
+    saveDate: "",
     goBack: function(idx){
         this.setValue && this.setValue[idx](back);
         this.states[idx] = StateCard.ENABLE;
@@ -43,6 +45,10 @@ var game = {
 	    this.mode = toLoad.mode || 1;
 	    this.level = toLoad.level || 1;
 	    this.totalScore = toLoad.totalScore || 0;
+	    this.saveId = toLoad.id || null;
+	    this.saveDate = toLoad.date || "";
+	    if (this.saveId) sessionStorage.saveId = this.saveId;
+	    if (this.saveDate) sessionStorage.saveDate = this.saveDate;
         }
         else{ // Nova partida
 	    let options = localStorage.options && JSON.parse(localStorage.options);
@@ -52,6 +58,8 @@ var game = {
 	    this.mode = parseInt(sessionStorage.mode || 1);
 	    this.level = sessionStorage.level ? parseInt(sessionStorage.level) : (options && options.startLevel ? parseInt(options.startLevel) : 1);
  	    this.totalScore = sessionStorage.totalScore ? parseInt(sessionStorage.totalScore) : 0;
+	    this.saveId = sessionStorage.saveId ? parseInt(sessionStorage.saveId) : null;
+	    this.saveDate = sessionStorage.saveDate || "";
 	    if (options && options.pairs) this.pairs = parseInt(options.pairs);
 	    if (options && options.groupSize) this.groupSize = parseInt(options.groupSize);
 	    if (this.mode === 2) {
@@ -113,7 +121,9 @@ var game = {
  	   	        if (this.mode === 2) {
 			    this.totalScore += this.score + this.level * 100;
  	 	   	    sessionStorage.totalScore = this.totalScore;
-        	    	    this.level++;
+               	    	    if (this.saveId) sessionStorage.saveId = this.saveId;
+			    if (this.saveDate) sessionStorage.saveDate = this.saveDate;
+			     this.level++;
 	                    sessionStorage.level = this.level;
 	 		    sessionStorage.mode = "2";
     			    sessionStorage.removeItem('load');
@@ -166,7 +176,29 @@ var game = {
 
         if (!ret) {
             console.warn("La partida s'ha guardat en local.");
-            localStorage.save = to_save;
+             let saves = localStorage.saves ? JSON.parse(localStorage.saves) : [];
+             let saveData = JSON.parse(to_save);
+	     if (this.saveId) {
+    		 saveData.id = this.saveId;
+    		 saveData.date = this.saveDate || new Date().toLocaleString();
+    		 let index = saves.findIndex(s => s.id === this.saveId);
+    		 if (index >= 0) {
+        	     saves[index] = saveData;
+    		 }
+    	     else {
+                 saves.push(saveData);
+    	     }
+	}
+	else {
+    	    saveData.id = Date.now();
+    	    saveData.date = new Date().toLocaleString();
+    	    this.saveId = saveData.id;
+    	    this.saveDate = saveData.date;
+    	    saves.push(saveData);
+
+	}
+    	     localStorage.saves = JSON.stringify(saves);
+    	     localStorage.save = JSON.stringify(saveData);
         }
         window.location.assign("../");
     

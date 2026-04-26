@@ -14,3 +14,39 @@ button.center{
 	color:red;
 	text-align: center;
 }
+.save-card{
+	width: 16rem;
+	height: auto;
+	min-height:8rem;
+	margin-top: 1rem;
+	padding: 0.8rem;
+	background-color: #9b4dcc;
+	color: white;
+	border: none;
+	border-radius: 1rem;
+	font-weight: bold;
+	line-height: 1.8rem;
+	white-space: normal;
+}
+#back{
+	margin-top: 1.5rem;
+}
+button.save-card{
+	width: 18rem;
+	min-height: 9rem;
+	height: auto;
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+	margin-top: 1.2rem;
+	margin-bottom: 1.2rem;
+	padding: 1rem;
+	background-color: #9b4dcc;
+	color: white;
+	border: none;
+	border-radius: 1rem;
+	font-weight: bold;
+	line-height: 1.7rem;
+	white-space: normal;
+	overflow: visible;
+}
