@@ -46,9 +46,11 @@ addEventListener('load', function() {
         sessionStorage.load = to_load;
         window.location.assign("./html/canvasgame.html");
     });
-
-    document.getElementById('exit').addEventListener('click', 
+    document.getElementById('mode2').addEventListener('click', 
     function(){
-        console.warn("No es pot sortir!");
+        sessionStorage.removeItem('load');
+        sessionStorage.mode = "2";
+        window.location.assign("./html/canvasgame.html");
     });
+
 });
