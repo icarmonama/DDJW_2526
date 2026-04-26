@@ -10,9 +10,6 @@ button.center{
 	margin-top: 1rem;
 }
 
-#title{
-	color:red;
-	text-align: center;
 }
 .save-card{
 	width: 16rem;
@@ -49,4 +46,58 @@ button.save-card{
 	line-height: 1.7rem;
 	white-space: normal;
 	overflow: visible;
+}
+
+body{
+	background-color: #f3f3f3;
+	font-family: Arial, sans-serif;
+	text-align: center;
+}
+
+button{
+	cursor: pointer;
+}
+
+button.center{
+	width: 10rem;
+	min-height: 3rem;
+	margin-top: 1rem;
+	border: none;
+	border-radius: 0.8rem;
+	background-color: #9b4dcc;
+	color: white;
+	font-weight: bold;
+}
+
+button.center:hover{
+	background-color: #7d36ad;
+}
+
+#title{
+	color: #8b0000;
+	text-align: center;
+}
+
+canvas{
+	background-color: white;
+	border: 2px solid #222;
+	margin-top: 1rem;
+}
+h1{
+	text-align: center;
+	color: #8b0000;
+}
+
+#game{
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+	margin-top: 1rem;
+}
+
+canvas#game{
+	background-color: white;
+	border: 3px solid #222;
+	border-radius: 1rem;
+	box-shadow: 0 0.5rem 1rem rgba(0,0,0,0.2);
 }
