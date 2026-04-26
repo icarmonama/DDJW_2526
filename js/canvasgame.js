@@ -25,11 +25,14 @@ function start(){
     cards.forEach((card, indx) => {
         loadCardResource(card.texture);
         initCard(val => card.texture = val);
-        card.position = {
-            xMin: 2+100*indx,
-            xMax: 2+100*indx + c_w,
-            yMin: 0,
-            yMax: c_h
+        let cols = 8;
+	let col = indx % cols;
+	let row = Math.floor(indx / cols);
+ 	card.position = {
+	    xMin: 2 + 100 * col,
+    	    xMax: 2 + 100 * col + c_w,
+    	    yMin: 10 + 140 * row,
+    	    yMax: 10 + 140 * row + c_h
         }
         card.onClick = function(x, y){
             return x >= this.position.xMin && x <= this.position.xMax &&

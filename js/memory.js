@@ -19,6 +19,8 @@ var game = {
     pairs: 2,
     groupSize: 2,
     selectedCards: [],
+    mode: 1,
+    level: 1,
     goBack: function(idx){
         this.setValue && this.setValue[idx](back);
         this.states[idx] = StateCard.ENABLE;
@@ -37,12 +39,31 @@ var game = {
             this.pairs = toLoad.pairs;
 	    this.groupSize = toLoad.groupSize || 2;
 	    this.selectedCards = toLoad.selectedCards || [];
+	    this.mode = toLoad.mode || 1;
+	    this.level = toLoad.level || 1;
         }
         else{ // Nova partida
 	    let options = localStorage.options && JSON.parse(localStorage.options);
+	    this.ready = 0;
+	    this.lastCard = null;
+	    this.selectedCards = [];
+	    this.mode = parseInt(sessionStorage.mode || 1);
+	    this.level = sessionStorage.level ? parseInt(sessionStorage.level) : (options && options.startLevel ? parseInt(options.startLevel) : 1);
 	    if (options && options.pairs) this.pairs = parseInt(options.pairs);
 	    if (options && options.groupSize) this.groupSize = parseInt(options.groupSize);
-
+	    if (this.mode === 2) {
+		this.pairs = Math.min(2 + this.level - 1, 6);
+	    	if (this.level < 3) {
+       		    this.groupSize = 2;
+    	    	}
+    	    	else if (this.level < 5) {
+        	    this.groupSize = 3;
+    	   	}
+    	    	else {
+        	    this.groupSize = 4;
+    		}
+    	    	this.score = 200 + this.level * 50;
+	    }
 	    this.items = resources.slice();
 	    shuffe(this.items);
     	    this.items = this.items.slice(0, this.pairs);
@@ -77,48 +98,40 @@ var game = {
     },
     click: function(indx){
 	    if (this.states[indx] !== StateCard.ENABLE || this.ready < this.items.length) return;
-
     	    this.goFront(indx);
-
     	    this.selectedCards.push(indx);
-
 	    if (this.selectedCards.length < this.groupSize) return;
-
     	    let firstItem = this.items[this.selectedCards[0]];
-
     	    let correct = this.selectedCards.every(idx => this.items[idx] === firstItem);
-
     	    if (correct){
-
         	    this.selectedCards.forEach(idx => this.states[idx] = StateCard.DONE);
-
         	    this.pairs--;
-
         	    if (this.pairs <= 0){
-
-            	        alert(`Has guanyat amb ${this.score} punts!!!!`);
-
-            	        window.location.assign("../");
-
+ 	   	        if (this.mode === 2) {
+        	    	    this.level++;
+	                    sessionStorage.level = this.level;
+	 		    sessionStorage.mode = "2";
+    			    sessionStorage.removeItem('load');
+    			    alert(`Nivell superat! Ara comença el nivell ${this.level}`);
+    			    window.location.assign("./canvasgame.html");
+    			}
+    			else {
+        		    alert(`Has guanyat amb ${this.score} punts!!!!`);
+        	    	    window.location.assign("../");
+    			}
         	    }
-
     	    }
-
     	    else {
-		    this.selectedCards.forEach(idx => this.goBack(idx));
-
-        	    this.score -= 25;
-
+		    let wrongCards = this.selectedCards.slice();
+		    this.score -= 25;
+    		    setTimeout(() => {
+        	        wrongCards.forEach(idx => this.goBack(idx));
+    	 	    }, 700);
         	    if (this.score <= 0){
-
             	        alert("Has perdut");
-
             	        window.location.assign("../");
-
         	    }
-
     	    }
-
     	    this.selectedCards = [];
     },
     save: function(){

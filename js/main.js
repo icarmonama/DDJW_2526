@@ -49,6 +49,7 @@ addEventListener('load', function() {
     document.getElementById('mode2').addEventListener('click', 
     function(){
         sessionStorage.removeItem('load');
+	sessionStorage.removeItem('level');
         sessionStorage.mode = "2";
         window.location.assign("./html/canvasgame.html");
     });
