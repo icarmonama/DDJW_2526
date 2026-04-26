@@ -21,6 +21,7 @@ var game = {
     selectedCards: [],
     mode: 1,
     level: 1,
+    totalScore: 0,
     goBack: function(idx){
         this.setValue && this.setValue[idx](back);
         this.states[idx] = StateCard.ENABLE;
@@ -41,6 +42,7 @@ var game = {
 	    this.selectedCards = toLoad.selectedCards || [];
 	    this.mode = toLoad.mode || 1;
 	    this.level = toLoad.level || 1;
+	    this.totalScore = toLoad.totalScore || 0;
         }
         else{ // Nova partida
 	    let options = localStorage.options && JSON.parse(localStorage.options);
@@ -49,6 +51,7 @@ var game = {
 	    this.selectedCards = [];
 	    this.mode = parseInt(sessionStorage.mode || 1);
 	    this.level = sessionStorage.level ? parseInt(sessionStorage.level) : (options && options.startLevel ? parseInt(options.startLevel) : 1);
+ 	    this.totalScore = sessionStorage.totalScore ? parseInt(sessionStorage.totalScore) : 0;
 	    if (options && options.pairs) this.pairs = parseInt(options.pairs);
 	    if (options && options.groupSize) this.groupSize = parseInt(options.groupSize);
 	    if (this.mode === 2) {
@@ -108,11 +111,13 @@ var game = {
         	    this.pairs--;
         	    if (this.pairs <= 0){
  	   	        if (this.mode === 2) {
+			    this.totalScore += this.score + this.level * 100;
+ 	 	   	    sessionStorage.totalScore = this.totalScore;
         	    	    this.level++;
 	                    sessionStorage.level = this.level;
 	 		    sessionStorage.mode = "2";
     			    sessionStorage.removeItem('load');
-    			    alert(`Nivell superat! Ara comença el nivell ${this.level}`);
+    			    alert(`Nivell superat! Puntuació total: ${this.totalScore}. Ara comença el nivell ${this.level}`);
     			    window.location.assign("./canvasgame.html");
     			}
     			else {
@@ -142,7 +147,10 @@ var game = {
             score: this.score,
             pairs: this.pairs,
 	    groupSize: this.groupSize,
-	    selectedCards: this.selectedCards
+	    selectedCards: this.selectedCards,
+	    mode: this.mode,
+	    level: this.level,
+	    totalScore: this.totalScore
         });
         let ret = false;
         fetch('../php/save.php', {
