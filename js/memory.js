@@ -133,7 +133,10 @@ var game = {
         	        wrongCards.forEach(idx => this.goBack(idx));
     	 	    }, 700);
         	    if (this.score <= 0){
-            	        alert("Has perdut");
+            	        if (this.mode === 2) {
+        		    this.saveRanking();
+    			}
+			alert("Has perdut");
             	        window.location.assign("../");
         	    }
     	    }
@@ -166,6 +169,21 @@ var game = {
             localStorage.save = to_save;
         }
         window.location.assign("../");
+    
+},
+
+    saveRanking: function(){
+        let alias = prompt("Introdueix el teu àlies:");
+        if (!alias) alias = "Jugador";
+        let ranking = localStorage.ranking ? JSON.parse(localStorage.ranking) : [];
+        ranking.push({
+            alias: alias,
+            score: this.totalScore,
+            level: this.level
+        });
+        ranking.sort((a, b) => b.score - a.score);
+        ranking = ranking.slice(0, 10);
+        localStorage.ranking = JSON.stringify(ranking);
     }
 }
 
