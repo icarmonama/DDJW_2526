@@ -2,6 +2,7 @@ addEventListener('load', function() {
     document.getElementById('play').addEventListener('click', 
     function(){
         sessionStorage.removeItem('load');
+	sessionStorage.mode = "1";
         window.location.assign("./html/canvasgame.html");
     });
     document.getElementById('scores').addEventListener('click', 
